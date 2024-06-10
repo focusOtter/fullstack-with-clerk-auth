@@ -1,5 +1,4 @@
 import * as ddb from '@aws-appsync/utils/dynamodb'
-import { util } from '@aws-appsync/utils'
 
 export function request(ctx) {
 	const { owner } = ctx.identity.resolverContext
@@ -14,8 +13,5 @@ export function request(ctx) {
 export function response(ctx) {
 	const { items = [], nextToken } = ctx.result
 
-	const { owner: clerkUser } = ctx.identity.resolverContext
-	const allOwner = items.every((item) => item.owner === clerkUser)
-	if (!allOwner) util.unauthorized()
 	return { items, nextToken }
 }

@@ -9,7 +9,7 @@ export function request(ctx) {
 export function response(ctx) {
 	//if the owner field isn't the same as the identity, the throw
 	const { owner: clerkUser } = ctx.identity.resolverContext
-	const ddbOwner = ctx.result.owner
+	const { owner: ddbOwner } = ctx.result
 	if (ddbOwner !== clerkUser) {
 		util.unauthorized()
 	}

@@ -15,6 +15,7 @@ const CreateMilestonesPage = () => {
 		// 	},
 		// 	{ authToken: jwtToken }
 		// ).then(console.log)
+
 		// client.mutations
 		// 	.createMilestoneWithOwner(
 		// 		{
@@ -24,6 +25,7 @@ const CreateMilestonesPage = () => {
 		// 		{ authToken: jwtToken }
 		// 	)
 		// 	.then(console.log)
+
 		// client.queries
 		// 	.getMilestoneByOwner(
 		// 		{ id: 'd0fa4901-4a58-43ec-a89c-6227233a0dd7' },

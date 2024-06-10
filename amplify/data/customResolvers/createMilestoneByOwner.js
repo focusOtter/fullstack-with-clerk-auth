@@ -13,7 +13,7 @@ export function request(ctx) {
 		updatedAt: now,
 		__typename: 'Milestone',
 	}
-	const key = { id: util.autoId() }
+	const key = { id }
 	return ddb.put({ key, item })
 }
 

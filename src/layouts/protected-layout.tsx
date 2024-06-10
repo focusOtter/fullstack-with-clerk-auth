@@ -7,19 +7,15 @@ export default function DashboardLayout() {
 	const navigate = useNavigate()
 	const [userToken, setUserToken] = useState<string | null>()
 
-	console.log('test', userId)
-
 	useEffect(() => {
 		if (isLoaded && !userId) {
 			navigate('/sign-in')
 		}
-	}, [isLoaded, navigate, userId])
 
-	useEffect(() => {
 		if (isLoaded && userId) {
 			getToken().then(setUserToken)
 		}
-	}, [getToken, userId, isLoaded])
+	}, [isLoaded, navigate, userId, getToken])
 
 	if (!isLoaded) return 'Loading...'
 
