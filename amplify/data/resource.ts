@@ -2,37 +2,39 @@ import { type ClientSchema, a, defineData } from '@aws-amplify/backend'
 import { APIAuthorizer } from '../functions/APIAuthorizer/resource'
 
 const schema = a.schema({
+	Milestone: a
+		.model({
+			title: a.string().required(),
+			description: a.string(),
+			owner: a.string(),
+		})
+		.authorization((allow) => [allow.publicApiKey(), allow.custom('function')])
+		.secondaryIndexes((index) => [index('owner')]),
 	ItemsResponse: a.customType({
-		id: a.id(),
-		title: a.string(),
+		id: a.id().required(),
+		title: a.string().required(),
 		description: a.string(),
-		owner: a.string(),
-		createdAt: a.datetime(),
-		updatedAt: a.datetime(),
+		owner: a.string().required(),
+		createdAt: a.datetime().required(),
+		updatedAt: a.datetime().required(),
 	}),
 	PaginatedMilestonesResponse: a.customType({
 		items: a.ref('ItemsResponse').array(),
 		nextToken: a.string(),
 	}),
-	Milestone: a
-		.model({
-			title: a.string().required(),
-			description: a.string().required(),
-			owner: a.string(),
-		})
-		.authorization((allow) => [allow.publicApiKey(), allow.custom('function')])
-		.secondaryIndexes((index) => [index('owner')]),
 	createMilestoneWithOwner: a
 		.mutation()
 		.arguments({
 			title: a.string().required(),
-			description: a.string().required(),
+			description: a.string(),
 		})
 		.returns(a.ref('Milestone'))
 		.handler([
 			a.handler.custom({
+				// reuse the table create by Amplify.
+				// If table created with CDK, a.ref() will contain the logical ID of the construct
 				dataSource: a.ref('Milestone'),
-				entry: './createMilestoneByOwner.js',
+				entry: './customResolvers/createMilestoneByOwner.js',
 			}),
 		])
 		.authorization((allow) => [allow.custom('function')]),
@@ -43,7 +45,7 @@ const schema = a.schema({
 		.handler([
 			a.handler.custom({
 				dataSource: a.ref('Milestone'),
-				entry: './getMilestoneByOwner.js',
+				entry: './customResolvers/getMilestoneByOwner.js',
 			}),
 		])
 		.authorization((allow) => [allow.custom('function')]),
@@ -54,7 +56,33 @@ const schema = a.schema({
 		.handler([
 			a.handler.custom({
 				dataSource: a.ref('Milestone'),
-				entry: './listMilestonesByOwner.js',
+				entry: './customResolvers/listMilestonesByOwner.js',
+			}),
+		])
+		.authorization((allow) => [allow.custom('function')]),
+	deleteMilestoneByOwner: a
+		.mutation()
+		.arguments({ id: a.string().required() })
+		.returns(a.ref('Milestone'))
+		.handler([
+			a.handler.custom({
+				dataSource: a.ref('Milestone'),
+				entry: './customResolvers/deleteMilestoneByOwner.js',
+			}),
+		])
+		.authorization((allow) => [allow.custom('function')]),
+	updateMilestoneByOwner: a
+		.mutation()
+		.arguments({
+			id: a.string().required(),
+			title: a.string(),
+			description: a.string(),
+		})
+		.returns(a.ref('Milestone'))
+		.handler([
+			a.handler.custom({
+				dataSource: a.ref('Milestone'),
+				entry: './customResolvers/updateMilestoneByOwner.js',
 			}),
 		])
 		.authorization((allow) => [allow.custom('function')]),
