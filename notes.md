@@ -31,9 +31,13 @@ The landing page should speak on that.
 
 This app needs a place to add milestones (text + images), and view them. Note that the only person that should be able to view them are the owner.
 
-## View Milestones Page
+### View and Create Milestones Pages
 
-1. Create the page
-1. [Protect the Page with Clerk Auth](https://clerk.com/docs/references/react/add-react-router)
-1. Create the API to auth based on a simple Lambda function
-1. [Enhance to the Lambda function](https://x.com/focusotter/status/1756048608011473122) to check the Authorization header which will contain the Clerk logic
+> If this where an application where you simply needed to be signed in to see some protected data, then using the AWS Amplify `.authorization(allow => ([allow.authenticated()]))` would be fine. But in this app, we want [`owner` authorization](https://docs.amplify.aws/react/build-a-backend/data/customize-authz/per-user-per-owner-data-access/#customize-the-owner-field). Amplify uses cognito to apply an owner using the format `<sub>::<username>`. Since we're not using Cognito, we have to manage that ourselves.
+
+1. Create the page✅
+1. [Protect the Page with Clerk Auth](https://clerk.com/docs/references/react/add-react-router)✅
+1. Create the API to auth based on a simple Lambda function✅
+1. [Enhance to the Lambda function](https://x.com/focusotter/status/1756048608011473122) to check the Authorization header which will contain the Clerk logic so I can [manually verify the JWT](https://clerk.com/docs/backend-requests/handling/manual-jwt)
+
+> "Retrieve the session token from either \_\_session cookie for a same origin request or from the Authorization header for cross origin requests."

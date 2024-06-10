@@ -17,21 +17,14 @@ const Navbar = () => {
 						</Link>
 					</li>
 					<li>
-						<details>
-							<summary className="hover:bg-secondary">My Account</summary>
-							<ul className="p-2 bg-secondary rounded-t-none">
-								<li>
-									<SignedIn>
-										<UserButton afterSignOutUrl="/sign-in" />
-									</SignedIn>
-								</li>
-								<li>
-									<SignedOut>
-										<Link to="/sign-in">Sign In</Link>
-									</SignedOut>
-								</li>
-							</ul>
-						</details>
+						<SignedIn>
+							<UserButton afterSignOutUrl="/sign-in" />
+						</SignedIn>
+					</li>
+					<li>
+						<SignedOut>
+							<Link to="/sign-in">Sign In</Link>
+						</SignedOut>
 					</li>
 				</ul>
 			</div>
