@@ -8,7 +8,7 @@ const schema = a.schema({
 			description: a.string().required(),
 			imageId: a.string(),
 		})
-		.authorization((allow) => [allow.publicApiKey()]),
+		.authorization((allow) => [allow.publicApiKey(), allow.custom('function')]),
 })
 
 export type Schema = ClientSchema<typeof schema>

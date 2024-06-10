@@ -1,12 +1,14 @@
 import { Handler } from 'aws-lambda'
 import jwt, { JwtPayload } from 'jsonwebtoken'
 import * as crypto from 'crypto'
+import { env } from '$amplify/env/clerk-api-authorizer'
 
 const jwkToPem = (jwk: string) => {
 	const keyObject = crypto.createPublicKey({
 		key: jwk,
 		format: 'jwk',
 	})
+	console.log('the key object', keyObject)
 
 	const pem = keyObject.export({
 		type: 'spki',
@@ -15,31 +17,38 @@ const jwkToPem = (jwk: string) => {
 
 	return pem
 }
-export const handler: Handler = async (event: { authorization: string }) => {
-	const token = event.authorization
-	// const secret = 'clerk secret. Define me later'
-	const validDomains = ['http://localhost:3000']
+//make sure lambda runtime supports `fetch` (v >= 20)
+export const handler: Handler = async (event: {
+	authorizationToken: string
+}) => {
+	const token = event.authorizationToken
+	const secret = env.CLERK_API_KEY
+	const validDomains = ['http://localhost:5173']
 
-	//make sure lambda runtime supports `fetch` (v >= 20)
-
+	console.log('the event', event)
+	console.log('the token', token)
 	const res = await fetch('https://api.clerk.com/v1/jwks', {
 		headers: {
-			Authorization: `Bearer ${token}`,
+			Authorization: `Bearer ${secret}`,
 		},
 	})
 
 	const data = await res.json()
 	console.log('hi im the data', data)
-	console.log('hi im the data first key', data[0])
+	console.log('hi im the data first key', data.keys[0])
 	const pem = jwkToPem(data.keys[0])
-
+	console.log('the pem', pem)
 	let decoded: JwtPayload | null = null
 	try {
 		decoded = jwt.verify(token, pem) as JwtPayload
+		console.log('the decoded', decoded)
 	} catch (e) {
+		console.log('the error', e)
 		return 'Invalid token'
 	}
 
+	console.log('the full decoded', decoded)
+	console.log('the azp', decoded.azp)
 	if (!decoded || !validDomains.includes(decoded.azp))
 		return { isAuthorized: false }
 
