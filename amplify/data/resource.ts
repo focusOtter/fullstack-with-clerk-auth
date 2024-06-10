@@ -49,6 +49,7 @@ const schema = a.schema({
 		.authorization((allow) => [allow.custom('function')]),
 	listMilestonesByOwner: a
 		.query()
+		.arguments({ nextToken: a.string(), limit: a.integer() })
 		.returns(a.ref('PaginatedMilestonesResponse'))
 		.handler([
 			a.handler.custom({

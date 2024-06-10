@@ -39,7 +39,7 @@ const CreateMilestonesPage = () => {
 		// ).then(console.log)
 
 		client.queries
-			.listMilestonesByOwner({ authToken: jwtToken })
+			.listMilestonesByOwner({ limit: 1 }, { authToken: jwtToken })
 			.then(console.log)
 	}, [jwtToken])
 
