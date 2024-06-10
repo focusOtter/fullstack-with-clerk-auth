@@ -8,7 +8,6 @@ const jwkToPem = (jwk: string) => {
 		key: jwk,
 		format: 'jwk',
 	})
-	console.log('the key object', keyObject)
 
 	const pem = keyObject.export({
 		type: 'spki',
@@ -25,8 +24,6 @@ export const handler: Handler = async (event: {
 	const secret = env.CLERK_API_KEY
 	const validDomains = ['http://localhost:5173']
 
-	console.log('the event', event)
-	console.log('the token', token)
 	const res = await fetch('https://api.clerk.com/v1/jwks', {
 		headers: {
 			Authorization: `Bearer ${secret}`,
@@ -34,21 +31,16 @@ export const handler: Handler = async (event: {
 	})
 
 	const data = await res.json()
-	console.log('hi im the data', data)
-	console.log('hi im the data first key', data.keys[0])
 	const pem = jwkToPem(data.keys[0])
-	console.log('the pem', pem)
+
 	let decoded: JwtPayload | null = null
 	try {
 		decoded = jwt.verify(token, pem) as JwtPayload
-		console.log('the decoded', decoded)
 	} catch (e) {
 		console.log('the error', e)
 		return 'Invalid token'
 	}
 
-	console.log('the full decoded', decoded)
-	console.log('the azp', decoded.azp)
 	if (!decoded || !validDomains.includes(decoded.azp))
 		return { isAuthorized: false }
 

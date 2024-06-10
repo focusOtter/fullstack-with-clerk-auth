@@ -39,5 +39,6 @@ This app needs a place to add milestones (text + images), and view them. Note th
 1. [Protect the Page with Clerk Auth](https://clerk.com/docs/references/react/add-react-router)✅
 1. Create the API to auth based on a simple Lambda function✅
 1. [Enhance to the Lambda function](https://x.com/focusotter/status/1756048608011473122) to check the Authorization header which will contain the Clerk logic so I can [manually verify the JWT](https://clerk.com/docs/backend-requests/handling/manual-jwt)
+1. Review how to add ownership by looking at my [cdk starter repo](https://github.com/focusOtter/fullstack-nextjs-cdk-starter/tree/main/_backend/lib/api/TS_functions)
 
 > "Retrieve the session token from either \_\_session cookie for a same origin request or from the Authorization header for cross origin requests."
