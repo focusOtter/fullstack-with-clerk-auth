@@ -1,4 +1,4 @@
-# # Fullstack Authentication with AWS and Clerk
+# Fullstack Authentication with AWS and Clerk
 
 Welcome to the **Fullstack Authentication with AWS and Clerk** project! This repository contains a comprehensive full-stack application that integrates a modern React frontend with an AWS-powered backend. Authentication and authorization are handled seamlessly using Clerk and custom AWS Lambda authorizers.
 
